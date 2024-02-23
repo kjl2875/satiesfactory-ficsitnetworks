@@ -1,0 +1,129 @@
+https://ficsit.app에서 ModManager설치 및 실행
+ModManager에서 FicsIt-Networks검색하고 install mod
+
+새게임 "샌드박스"에서 제련기 하드웨어 구성완료
+	요즘버전에서는 치트기능을 체크옵션으로 제공함.
+	
+제련기 제작법 일괄변경 토글스위치 개발
+	마일스톤 = "Tier4 I/O & Control"의 "Codeable Spliter/Codeable Merger"
+	하드웨어(제조) = 제련기 4대의 I/O를 저장컨테이너와 매니폴드방식으로 연결하고 전신주에 송전선 연결
+	하드웨어(IT)
+		제련기와 Computer Case를 Network Pole에 Network Cable을 연결
+		Computer Case에 "CPU T1 (Lua)","RAM T1"을 설치하고 "Lua EEPROM"을 삽입하면 컴퓨터에 Lua코딩 사용가능.
+참조문서
+	FicsIt-Networks
+	https://docs.ficsit.app/ficsit-networks/latest/index.html
+		Lua Examples
+			여기있는것들은 복붙으로 깔끔하게 실행되는거 하나 없는 것 같다.
+			Multi Threading Example
+				https://docs.ficsit.app/ficsit-networks/latest/lua/examples/multiThreading.html
+				2024.02.23-10.50.47 [Fatal] EEPROM:28: bad argument #1 to 'resume' (is no thread)
+				stack traceback:
+					[C]: in function 'coroutine.resume'
+					EEPROM:28: in field 'run'
+					EEPROM:57: in main chunk
+			Lua PCI-Devices Example
+				https://docs.ficsit.app/ficsit-networks/latest/lua/examples/PCIDevices.html
+				EEPROM:1: Deprecated function call 'findClass', use 'classes' global library instead
+				EEPROM:1: Deprecated function call 'findClass', use 'classes' global library instead
+				EEPROM:1: Deprecated function call 'findClass', use 'classes' global library instead
+			Lua Internet Card Example
+				local card = computer.getPCIDevices(findClass("FINInternetCard"))[1]
+				EEPROM:1: Deprecated function call 'findClass', use 'classes' global library instead
+	FicsIt-Networks - Lua
+	https://www.youtube.com/watch?v=FeJYjMnLydo&list=PLKTdAeAt_BimxLkH05GSNBZpydxc553hE
+		FicsIt-Networks - Lua - Hello World | #01
+			Computer Setup and Lua Basic
+			print("Hello World")
+			print("Hello","World")
+			error("error message")
+		FicsIt-Networks - Lua - Tables | #02
+			myTable = {}
+			myTable["test"] = "meep"
+			myTable["test"] = 42
+			myTable["test"] = nil
+			print(myTable["test"])
+			
+			myTable = {
+				test = "meep",
+				okay = "huh"
+			}
+			print(myTable["okay"])
+			
+			myTable = {}
+			myTable.func = function()
+				return "hey ho!", 42.0
+			end
+			print(myTable.func()) -- hey ho! 42.0
+			
+			myTable = {}
+			myTable.func = function()
+				return "hey ho!", 42.0
+			end
+			-- myTable = nil
+			test = myTable
+			print(test.func(test)) -- hey ho! 42.0
+			
+			myTable = {}
+			myTable.text = "hey ho!"
+			myTable.func = function(self, var)
+				return self.text, 42.0, var
+			end
+			test = myTable
+			myTable = nil
+			print(test:func(65)) -- hey ho! 42.0 65
+			print(test:func(test)) -- hey ho! 42.0 table: 00000128EFDFDA20
+			
+			meep = component.proxy
+			meep()
+			component.proxy()
+			
+			myTable = {}
+			myTable[1] = "test"
+			myTable[2] = "okay"
+			myTable[3] = "meep"
+			print(myTable[2]) -- okay
+			
+			myTable = {				
+				"test",
+				"okay",
+				"meep"
+			}
+			print(myTable[1]) -- tset
+			print(myTable[3]) -- meep
+			print(myTable[2]) -- okay
+			print(myTable[4]) -- nil
+			print(myTable[5]) -- nil
+			myTable[5] = "huh"
+			print(#myTable) -- 3
+			myTable[4] = "fix"
+			print(#myTable) -- 5
+			myTable[#myTable + 1] = "add"
+			print(#myTable) -- 6
+			table.remove(myTable, 3)
+			print(#myTable) -- 5
+			print(myTable[3]) -- fix
+			table.insert(myTable, "sub")
+			print(myTable[6]) -- sub
+		FicsIt-Networks - Lua - Component Interaction | #03
+			item = component.proxy("2D2CE2B2413FBD44DAB436A7690A7F23") -- 왼쪽의 디바이스 목록중에서 하나 클릭하면 클립보드에 복사됨.
+			print(item) -- Object<Build_SmelterMk1_C>
+			recipe = item:getRecipe()
+			print(recipe) -- Class<Recipe> | nil
+			
+			(원하는걸 찾아가지고, 나머지 안봄)
+		FicsIt-Networks - Lua - Panels & Signals | #04
+			(원하는걸 찾아가지고, 나머지 안봄)
+		FicsIt-Networks - Lua - Control Statements | #05
+			(원하는걸 찾아가지고, 나머지 안봄)
+	
+	Carnaxus/Ficsit-CodeNode
+	https://github.com/Carnaxus/Ficsit-CodeNode/blob/master/smelting.txt
+		레시피 목록변수 예제
+			item = component.proxy("2D2CE2B2413FBD44DAB436A7690A7F23") -- 왼쪽의 디바이스 목록중에서 하나 클릭하면 클립보드에 복사됨.
+			print(item:getRecipes()) -- table: 0000012836EC4570
+			for i,recipe in pairs(item:getRecipes()) do
+				print(i,recipe) -- 1 Class<Recipe>
+				print(recipe.name) -- 철 주괴
+				print(recipe.duration) -- 2.0 (한번생산 할때 초단위 소요시간)
+			end
