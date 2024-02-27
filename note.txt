@@ -113,7 +113,62 @@ ModManager에서 FicsIt-Networks검색하고 install mod
 			
 			(원하는걸 찾아가지고, 나머지 안봄)
 		FicsIt-Networks - Lua - Panels & Signals | #04
-			(원하는걸 찾아가지고, 나머지 안봄)
+			Modular Control Panel
+				Panel의 LeftDown = {x=0,y=0}
+				panel = component.proxy()
+			Lua
+				event.ignoreAll()
+				event.clear()
+
+				panel = component.proxy("ECC41D804B57135804754DABCE557D43")
+				print(panel) -- Object<LargeControlPanel>
+
+
+				-- SHOWCASE
+
+				x = 0
+				y = 0
+				module = panel:getModule(x, y)
+				print(module) -- Object<ModuleButton>
+
+				red = 1
+				green = 0
+				blue = 0
+				emit = 5
+				module:setColor(red, green, blue, emit)
+
+				-- SHOWCASE
+
+				x = 5
+				y = 0
+				module = panel:getModule(x, y)
+				print(module) -- Object<ModuleTextDisplay>
+
+				module.text = "Hello!"
+				module.size = 100
+				module.monospace = true
+
+				-- SHOWCASE
+
+				x = 1
+				y = 0
+				module = panel:getModule(x, y)
+				print(module) -- Object<ModuleStopButton>
+				event.listen(module)
+				event.listen(panel:getModule(0, 0))
+
+				while true do
+					e, s = event.pull(1.0)
+					if e == 'Trigger' then
+						print(e, s)
+						if s == module then
+							break
+						end
+					else
+						print('Nohting event.')
+					end
+				end
+				print('E.O.F.')
 		FicsIt-Networks - Lua - Control Statements | #05
 			(원하는걸 찾아가지고, 나머지 안봄)
 	
